@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
-import { AppShell, Header, Text, Navbar, Button, Group, AspectRatio } from '@mantine/core';
-import { Home, Dashboard, FileText, Search, Route } from 'tabler-icons-react';
+import { AppShell, Menu, Header, Text, Navbar, Button, Group, AspectRatio, Divider } from '@mantine/core';
+import { Search, Route, PlayerPlay } from 'tabler-icons-react';
 import type { SpotlightAction } from '@mantine/spotlight';
 import { SpotlightProvider, useSpotlight } from '@mantine/spotlight';
 import MapboxMap from "../components/mapbox-map";
@@ -9,19 +9,12 @@ import Head from 'next/head'
 import Image from 'next/image'
 import dynamic from 'next/dynamic';
 import styles from '../styles/Home.module.css'
+import SpotlightControl from '../components/spotlight/spotlight-control';
 
 const DynamicMapNoSSR = dynamic(() => import('../components/mapbox-map'), {
   ssr: false
 });
 
-function SpotlightControl() {
-  const spotlight = useSpotlight();
-  return (
-    <Group position="center">
-      <Button onClick={spotlight.openSpotlight}>Open spotlight</Button>
-    </Group>
-  );
-}
 
 const actions: SpotlightAction[] = [
   {
@@ -43,10 +36,21 @@ const HomePage: NextPage = () => {
     >
       <AppShell
         padding={0}
-        header={<Header height={"6vh"} p="xs"><Group><Image src="/../public/airlift.png" alt="Airlift logo" width='40px' height='40px' layout="fixed"></Image><Text variant="gradient"
+        header={<Header height={"6vh"} p="xs"><Group position="apart"><Group><Image src="/../public/airlift.png" alt="Airlift logo" width='40px' height='40px' layout="fixed"></Image><Text variant="gradient"
           gradient={{ from: 'cyan', to: 'pink', deg: 45 }}
           size="xl"
-          weight={400}>AIRLIFT</Text></Group></Header>}
+          weight={400}>AIRLIFT</Text></Group><Group><Menu control={<Button leftIcon={<PlayerPlay />} variant="subtle">
+            Run algorithm
+          </Button>}>
+            <Menu.Label>Transportation</Menu.Label>
+            <Menu.Item icon={<Route size={14} />}>Auto Bus</Menu.Item>
+            <Divider />
+            <SpotlightControl/>
+          </Menu><Menu control={<Button variant="subtle">
+            Display options
+          </Button>}>
+              <Menu.Label>Display options go here</Menu.Label>
+            </Menu></Group></Group></Header>}
         styles={(theme) => ({
           main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
         })}
