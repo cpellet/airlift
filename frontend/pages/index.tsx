@@ -10,6 +10,8 @@ import Image from 'next/image'
 import dynamic from 'next/dynamic';
 import styles from '../styles/Home.module.css'
 import SpotlightControl from '../components/spotlight/spotlight-control';
+import axios from 'axios';
+import { APIService } from '../api/ApiService';
 
 const DynamicMapNoSSR = dynamic(() => import('../components/mapbox-map'), {
   ssr: false
@@ -25,7 +27,7 @@ const actions: SpotlightAction[] = [
   }
 ];
 
-const HomePage: NextPage = () => {
+const HomePage: NextPage = (airliftServer) => {
   return (
      <SpotlightProvider
       actions={actions}
@@ -60,5 +62,12 @@ const HomePage: NextPage = () => {
     </SpotlightProvider>
   )
 }
+
+HomePage.getInitialProps = async () => {
+  const service = new APIService("http://localhost:5050");
+  service.initialise();
+  return {};
+}
+
 
 export default HomePage

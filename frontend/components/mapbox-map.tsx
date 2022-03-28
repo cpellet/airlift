@@ -1,9 +1,8 @@
-import { Component } from 'react';
+import { Component, useState } from 'react';
 import Map, { Source, Layer } from 'react-map-gl';
-import type { SkyLayer } from 'react-map-gl';
+import Geocoder from '@mapbox/mapbox-gl-geocoder';
 
 class MapboxMap extends Component {
-
     render() {
         return (
             <>

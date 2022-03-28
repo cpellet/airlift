@@ -8,7 +8,7 @@ export default function App(props: AppProps) {
   return (
     <>
       <Head>
-        <title>Page title</title>
+        <title>AIRLIFT - Geospatial Analysis Engine</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         <link
           href="https://api.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css"
