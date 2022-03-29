@@ -1,4 +1,4 @@
-import {AppShell, Menu, Header, Text, Button, Group, Divider, Image, Footer, Container} from '@mantine/core';
+import { AppShell, Menu, Header, Text, Button, Group, Divider, Image, Footer, Container } from '@mantine/core';
 import { Search, Route, PlayerPlay } from 'tabler-icons-react';
 import { SpotlightProvider, SpotlightAction } from '@mantine/spotlight';
 import './App.css';
@@ -17,7 +17,7 @@ const actions: SpotlightAction[] = [
   }
 ];
 
-async function fetchAirliftServerData(url: string){
+async function fetchAirliftServerData(url: string) {
   try {
     const result = await axios.get(url);
     return result.data;
@@ -42,40 +42,28 @@ function App() {
       shortcut="shift + space"
       nothingFoundMessage="Nothing found..."
     >
-      <AppShell
-        padding={0}
-        header={<Header height={"6vh"} p="xs"><Group position="apart"><Group><Image src='/airlift.png' alt="Airlift logo" width='30px' height='30px'></Image><Text variant="gradient"
-          gradient={{ from: 'cyan', to: 'pink', deg: 45 }}
-          size="xl"
-          weight={400}>AIRLIFT</Text></Group><Group><Menu control={<Button leftIcon={<PlayerPlay />} variant="subtle">
-            Run algorithm
-          </Button>}>
-            <Menu.Label>Transportation</Menu.Label>
-            <Menu.Item icon={<Route size={14} />}>Auto Bus</Menu.Item>
-            <Divider />
-            <SpotlightControl />
-          </Menu><Menu control={<Button variant="subtle">
-            Display options
-          </Button>}>
-              <Menu.Label>Display options go here</Menu.Label>
-            </Menu></Group></Group></Header>}
-        styles={(theme) => ({
-          main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
-        })}
+    <AppShell
+      padding={0}
+      header={<Header height={"55px"} p="xs"><Group position="apart"><Group><Image src='/airlift.png' alt="Airlift logo" width='30px' height='30px'></Image><Text variant="gradient"
+        gradient={{ from: 'cyan', to: 'pink', deg: 160 }}
+        size="xl"
+        weight={700}>AIRLIFT</Text></Group><Group><Menu control={<Button leftIcon={<PlayerPlay />} variant="subtle">
+          Run algorithm
+        </Button>}>
+          <Menu.Label>Transportation</Menu.Label>
+          <Menu.Item icon={<Route size={14} />}>Auto Bus</Menu.Item>
+          <Divider />
+          <SpotlightControl />
+        </Menu><Menu control={<Button variant="subtle">
+          Display options
+        </Button>}>
+            <Menu.Label>Display options go here</Menu.Label>
+          </Menu></Group></Group></Header>}
+      styles={(theme) => ({
+        main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
+      })}
       >
-      <>
-          <MapboxMap /><StatusPanel />
-      </>
-        <div className={"footer-container"}>
-          <div className={"footer"}>
-            <div className={"footer-element"}></div>
-            <div className={"footer-element"}></div>
-            <div className={"footer-element"}></div>
-            <div className={"footer-element"}></div>
-          </div>
-        </div>
-
-
+        <MapboxMap /><StatusPanel status="loading" host="localhost:5050"/>
       </AppShell>
     </SpotlightProvider>
   );

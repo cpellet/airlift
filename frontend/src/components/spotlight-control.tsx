@@ -1,10 +1,10 @@
 import { useSpotlight } from '@mantine/spotlight';
-import { Menu } from '@mantine/core';
+import { Menu, Text } from '@mantine/core';
 
 function SpotlightControl() {
     const spotlight = useSpotlight();
     return (
-        <Menu.Item onClick={spotlight.openSpotlight}>See all</Menu.Item>
+        <Menu.Item onClick={spotlight.openSpotlight} rightSection={<Text color="dimmed" size="xs">Shift + Space </Text>}>See all</Menu.Item>
     );
 }
 
