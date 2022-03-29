@@ -1,4 +1,4 @@
-import { AppShell, Menu, Header, Text, Button, Group, Divider, Image } from '@mantine/core';
+import {AppShell, Menu, Header, Text, Button, Group, Divider, Image, Footer, Container} from '@mantine/core';
 import { Search, Route, PlayerPlay } from 'tabler-icons-react';
 import { SpotlightProvider, SpotlightAction } from '@mantine/spotlight';
 import './App.css';
@@ -66,6 +66,16 @@ function App() {
       <>
           <MapboxMap /><StatusPanel />
       </>
+        <div className={"footer-container"}>
+          <div className={"footer"}>
+            <div className={"footer-element"}></div>
+            <div className={"footer-element"}></div>
+            <div className={"footer-element"}></div>
+            <div className={"footer-element"}></div>
+          </div>
+        </div>
+
+
       </AppShell>
     </SpotlightProvider>
   );
