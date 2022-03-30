@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, Loader, ThemeIcon } from '@mantine/core'
+import { Text, Loader, ThemeIcon, Tooltip, Button } from '@mantine/core'
 import { Check, X } from 'tabler-icons-react';
 
 
@@ -27,6 +27,9 @@ function DisplayElements(props: any) {
                     <X />
                 </ThemeIcon>
                 <Text className="status-panel-component" size="xs" weight={500} color="red" align="center">Could not connect to server</Text>
+                <Button variant="subtle" radius="md" size="xs" compact>
+                    Try again
+                </Button>
             </>
         )
     } else{
@@ -35,12 +38,23 @@ function DisplayElements(props: any) {
 }
 class StatusPanel extends React.Component<any, any>{
 
+    click = () => {
+        this.props.retry();
+    }
+
     render(): React.ReactNode {
         return (
             <div className={"status-panel-container"}>
-                <div className={"status-panel"}>
-                    <DisplayElements status={this.props.status} host={this.props.host}/>
-                </div>
+                <Tooltip
+                    label={'Server version: ' + this.props.version}
+                    radius="md"
+                    withArrow
+                    onClick={this.click}
+                    disabled={this.props.status !== "connected"}
+                    className={"status-panel"}
+                >
+                    <DisplayElements status={this.props.status} host={this.props.host} />
+                </Tooltip>
             </div>
         );
     }

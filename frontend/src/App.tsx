@@ -1,10 +1,10 @@
-import { AppShell, Menu, Header, Text, Button, Group, Divider, Image, Footer, Container } from '@mantine/core';
+import { AppShell, Menu, Header, Text, Button, Group, Divider, Image, Container } from '@mantine/core';
 import { Search, Route, PlayerPlay } from 'tabler-icons-react';
 import { SpotlightProvider, SpotlightAction } from '@mantine/spotlight';
 import './App.css';
 import SpotlightControl from './components/spotlight-control';
 import MapboxMap from './components/mapbox-map';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
 import StatusPanel from './components/status-panel';
 
@@ -18,21 +18,27 @@ const actions: SpotlightAction[] = [
 ];
 
 async function fetchAirliftServerData(url: string) {
-  try {
-    const result = await axios.get(url);
-    return result.data;
-  } catch (error) {
-    console.error(error);
-  }
+  return axios.get(url).then(function (res) { return res.data; }).catch(function (error) {
+    return {};
+  });
 };
 
 function App() {
 
+  const [serverData, setServerData] = useState({ 'status': 'loading', 'host': '', 'version':0})
+
+  async function setServerState() {
+    let serverData = await fetchAirliftServerData("http://localhost:5050/");
+    if (Object.keys(serverData).length === 0) {
+      setServerData({ 'status': 'error', 'host': '', 'version': 0 });
+    } else {
+      setServerData({ ...serverData, 'status': 'connected', 'host': 'http://localhost:5050/' });
+    }
+  }
+
   useEffect(() => {
-    console.log("App loaded");
-    let serverData = fetchAirliftServerData("http://localhost:5050/");
-    console.log(serverData);
-  })
+    setServerState();
+  }, [])
 
   return (
     <SpotlightProvider
@@ -63,7 +69,7 @@ function App() {
         main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
       })}
       >
-        <MapboxMap /><StatusPanel status="loading" host="localhost:5050"/>
+        <MapboxMap /><StatusPanel status={serverData.status} host={serverData.host} version={serverData.version} retry={setServerState}/>
       </AppShell>
     </SpotlightProvider>
   );
