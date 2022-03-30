@@ -9,15 +9,6 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import StatusPanel from './components/status-panel';
 
-const actions: SpotlightAction[] = [
-  {
-    title: 'Auto Bus',
-    description: 'Generate bus routes for this area',
-    onTrigger: () => console.log('Home'),
-    icon: <Route size={18} />,
-  }
-];
-
 async function fetchAirliftServerData(url: string) {
   return axios.get(url).then(function (res) { return res.data; }).catch(function (error) {
     return {};
@@ -26,12 +17,14 @@ async function fetchAirliftServerData(url: string) {
 
 function App() {
 
-  const [serverData, setServerData] = useState({ 'status': 'loading', 'host': '', 'version':0})
+  const [serverData, setServerData] = useState({ 'status': 'loading', 'host': '', 'version': 0, 'algos': [{'name':'test', 'description':'null'}]
+})
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'mantine-color-scheme',
     defaultValue: 'light',
   });
+
 
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
@@ -41,21 +34,33 @@ function App() {
   async function setServerState() {
     let serverData = await fetchAirliftServerData("http://localhost:5050/");
     if (Object.keys(serverData).length === 0) {
-      setServerData({ 'status': 'error', 'host': '', 'version': 0 });
+      setServerData({ 'status': 'error', 'host': '', 'version': 0, 'algos': []});
     } else {
       setServerData({ ...serverData, 'status': 'connected', 'host': 'http://localhost:5050/' });
+      loadAlgos();
     }
+  }
+
+  async function loadAlgos(){
+    let serverAlgos = await fetchAirliftServerData("http://localhost:5050/algos");
+    console.log(serverAlgos.algos);
+    setServerData({ ...serverData, 'algos': serverAlgos.algos, 'status': 'connected', 'host': 'http://localhost:5050/'});
   }
 
   useEffect(() => {
     setServerState();
-  }, [])
+  },[])
 
   return (
      <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }}>
         <SpotlightProvider
-          actions={actions}
+          actions={serverData.algos ? serverData.algos?.map((item, index) => ({
+            title: 'Auto Bus',
+            description: 'Generate bus routes for this area',
+            onTrigger: () => console.log('Home'),
+            icon: <Route size={18} />,
+          })) : []}
           searchIcon={<Search size={18} />}
           searchPlaceholder="Search..."
           shortcut="shift + space"
@@ -70,14 +75,14 @@ function App() {
                 Run algorithm
               </Button>}>
                 <Menu.Label>Transportation</Menu.Label>
-                <Menu.Item icon={<Route size={14} />}>Auto Bus</Menu.Item>
+                {
+                  serverData.algos?.map((item, index) => (
+                    <Menu.Item icon={<Route size={14} />}>{item.name}</Menu.Item>
+                  ))
+                }
                 <Divider />
                 <SpotlightControl />
-              </Menu><Menu control={<Button variant="subtle">
-                Display options
-              </Button>}>
-                  <Menu.Label>Display options go here</Menu.Label>
-                </Menu><ActionIcon
+              </Menu><ActionIcon
                   variant="outline"
                   color={dark ? 'yellow' : 'blue'}
                   onClick={() => toggleColorScheme()}
