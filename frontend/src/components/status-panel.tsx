@@ -36,22 +36,24 @@ function DisplayElements(props: any) {
         return (<p>Error</p>);
     }
 }
+
+
 class StatusPanel extends React.Component<any, any>{
 
     click = () => {
         this.props.retry();
     }
-
+    
     render(): React.ReactNode {
         return (
-            <div className={"status-panel-container"}>
+            <div className="status-panel-container">
                 <Tooltip
                     label={'Server version: ' + this.props.version}
                     radius="md"
                     withArrow
                     onClick={this.click}
                     disabled={this.props.status !== "connected"}
-                    className={"status-panel"}
+                    className={this.props.theme === 'light' ? "status-panel" : "status-panel dark"}
                 >
                     <DisplayElements status={this.props.status} host={this.props.host} />
                 </Tooltip>

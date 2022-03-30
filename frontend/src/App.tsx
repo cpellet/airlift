@@ -1,5 +1,6 @@
-import { AppShell, Menu, Header, Text, Button, Group, Divider, Image, Container } from '@mantine/core';
-import { Search, Route, PlayerPlay } from 'tabler-icons-react';
+import { AppShell, Menu, Header, Text, Button, Group, Divider, Image, MantineProvider, ColorSchemeProvider, ColorScheme, ActionIcon, useMantineColorScheme } from '@mantine/core';
+import { useLocalStorage } from '@mantine/hooks';
+import { Search, Route, PlayerPlay, Sun, MoonStars } from 'tabler-icons-react';
 import { SpotlightProvider, SpotlightAction } from '@mantine/spotlight';
 import './App.css';
 import SpotlightControl from './components/spotlight-control';
@@ -27,6 +28,16 @@ function App() {
 
   const [serverData, setServerData] = useState({ 'status': 'loading', 'host': '', 'version':0})
 
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'mantine-color-scheme',
+    defaultValue: 'light',
+  });
+
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
+  const dark = colorScheme === 'dark';
+
   async function setServerState() {
     let serverData = await fetchAirliftServerData("http://localhost:5050/");
     if (Object.keys(serverData).length === 0) {
@@ -41,37 +52,48 @@ function App() {
   }, [])
 
   return (
-    <SpotlightProvider
-      actions={actions}
-      searchIcon={<Search size={18} />}
-      searchPlaceholder="Search..."
-      shortcut="shift + space"
-      nothingFoundMessage="Nothing found..."
-    >
-    <AppShell
-      padding={0}
-      header={<Header height={"55px"} p="xs"><Group position="apart"><Group><Image src='/airlift.png' alt="Airlift logo" width='30px' height='30px'></Image><Text variant="gradient"
-        gradient={{ from: 'cyan', to: 'pink', deg: 160 }}
-        size="xl"
-        weight={700}>AIRLIFT</Text></Group><Group><Menu control={<Button leftIcon={<PlayerPlay />} variant="subtle">
-          Run algorithm
-        </Button>}>
-          <Menu.Label>Transportation</Menu.Label>
-          <Menu.Item icon={<Route size={14} />}>Auto Bus</Menu.Item>
-          <Divider />
-          <SpotlightControl />
-        </Menu><Menu control={<Button variant="subtle">
-          Display options
-        </Button>}>
-            <Menu.Label>Display options go here</Menu.Label>
-          </Menu></Group></Group></Header>}
-      styles={(theme) => ({
-        main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
-      })}
-      >
-        <MapboxMap /><StatusPanel status={serverData.status} host={serverData.host} version={serverData.version} retry={setServerState}/>
-      </AppShell>
-    </SpotlightProvider>
+     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+      <MantineProvider theme={{ colorScheme }}>
+        <SpotlightProvider
+          actions={actions}
+          searchIcon={<Search size={18} />}
+          searchPlaceholder="Search..."
+          shortcut="shift + space"
+          nothingFoundMessage="Nothing found..."
+        >
+          <AppShell
+            padding={0}
+            header={<Header height={"55px"} p="xs"><Group position="apart"><Group><Image src='/airlift.png' alt="Airlift logo" width='30px' height='30px'></Image><Text variant="gradient"
+              gradient={{ from: 'cyan', to: 'pink', deg: 160 }}
+              size="xl"
+              weight={700}>AIRLIFT</Text></Group><Group><Menu control={<Button leftIcon={<PlayerPlay />} variant="subtle">
+                Run algorithm
+              </Button>}>
+                <Menu.Label>Transportation</Menu.Label>
+                <Menu.Item icon={<Route size={14} />}>Auto Bus</Menu.Item>
+                <Divider />
+                <SpotlightControl />
+              </Menu><Menu control={<Button variant="subtle">
+                Display options
+              </Button>}>
+                  <Menu.Label>Display options go here</Menu.Label>
+                </Menu><ActionIcon
+                  variant="outline"
+                  color={dark ? 'yellow' : 'blue'}
+                  onClick={() => toggleColorScheme()}
+                  title="Toggle color scheme"
+                >
+                  {dark ? <Sun size={18} /> : <MoonStars size={18} />}
+                </ActionIcon></Group></Group></Header>}
+            styles={(theme) => ({
+              main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
+            })}
+          >
+            <MapboxMap theme={colorScheme} /><StatusPanel status={serverData.status} host={serverData.host} version={serverData.version} retry={setServerState} theme={colorScheme}/>
+          </AppShell>
+        </SpotlightProvider>
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 }
 
