@@ -17,7 +17,7 @@ async function fetchAirliftServerData(url: string) {
 
 function App() {
 
-  const [serverData, setServerData] = useState({ 'status': 'loading', 'host': '', 'version': 0, 'algos': [{'name':'test', 'description':'null'}]
+  const [serverData, setServerData] = useState({ 'status': 'loading', 'host': '', 'version': 0, 'algos': [{'name':'test', 'descr':'null'}]
 })
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -37,17 +37,12 @@ function App() {
       setServerData({ 'status': 'error', 'host': '', 'version': 0, 'algos': []});
     } else {
       setServerData({ ...serverData, 'status': 'connected', 'host': 'http://localhost:5050/' });
-      loadAlgos();
+      let serverAlgos = await fetchAirliftServerData("http://localhost:5050/algos");
+      setServerData({ ...serverData, 'algos': serverAlgos.algos, 'status': 'connected', 'host': 'http://localhost:5050/' });
     }
   }
 
-  async function loadAlgos(){
-    let serverAlgos = await fetchAirliftServerData("http://localhost:5050/algos");
-    console.log(serverAlgos.algos);
-    setServerData({ ...serverData, 'algos': serverAlgos.algos, 'status': 'connected', 'host': 'http://localhost:5050/'});
-  }
-
-  useEffect(() => {
+  useEffect(() => { 
     setServerState();
   },[])
 
@@ -56,8 +51,8 @@ function App() {
       <MantineProvider theme={{ colorScheme }}>
         <SpotlightProvider
           actions={serverData.algos ? serverData.algos?.map((item, index) => ({
-            title: 'Auto Bus',
-            description: 'Generate bus routes for this area',
+            title: item.name,
+            description: item.descr,
             onTrigger: () => console.log('Home'),
             icon: <Route size={18} />,
           })) : []}
@@ -83,12 +78,13 @@ function App() {
                 <Divider />
                 <SpotlightControl />
               </Menu><ActionIcon
-                  variant="outline"
+                  radius="xl"
+                  variant="hover"
                   color={dark ? 'yellow' : 'blue'}
                   onClick={() => toggleColorScheme()}
                   title="Toggle color scheme"
                 >
-                  {dark ? <Sun size={18} /> : <MoonStars size={18} />}
+                  {dark ? <Sun size={20} /> : <MoonStars size={20} />}
                 </ActionIcon></Group></Group></Header>}
             styles={(theme) => ({
               main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
