@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 import osmnx as ox
 import datetime
@@ -18,7 +18,9 @@ def nlqresolve():
 
 @app.route("/algos")
 def listalgos():
-    return {"algos": [a.export_signature() for a in algorithm.algos]}
+    response = jsonify({"algos": [a.export_signature() for a in algorithm.algos]})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5050)
