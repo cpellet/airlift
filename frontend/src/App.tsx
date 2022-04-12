@@ -1,7 +1,7 @@
-import { AppShell, Menu, Header, Text, Button, Group, Divider, Image, MantineProvider, ColorSchemeProvider, ColorScheme, ActionIcon, useMantineColorScheme } from '@mantine/core';
+import { AppShell, Menu, Header, Text, Button, Group, Divider, Drawer, Image, MantineProvider, ColorSchemeProvider, ColorScheme, ActionIcon } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { Search, Route, PlayerPlay, Sun, MoonStars } from 'tabler-icons-react';
-import { SpotlightProvider, SpotlightAction } from '@mantine/spotlight';
+import { SpotlightProvider } from '@mantine/spotlight';
 import './App.css';
 import SpotlightControl from './components/spotlight-control';
 import MapboxMap from './components/mapbox-map';
@@ -15,15 +15,20 @@ async function fetchAirliftServerData(url: string) {
   });
 };
 
+const algo_type = {name: '', descr: ''};
+
 function App() {
 
-  const [serverData, setServerData] = useState({ 'status': 'loading', 'host': '', 'version': 0, 'algos': [{'name':'test', 'descr':'null'}]
+  const [serverData, setServerData] = useState({
+    'status': 'loading', 'host': '', 'version': 0, 'algos': [algo_type]
 })
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'mantine-color-scheme',
     defaultValue: 'light',
   });
+
+  const [drawerOpened, setDrawerOpened] = useState(false);
 
 
   const toggleColorScheme = (value?: ColorScheme) =>
@@ -42,6 +47,9 @@ function App() {
     }
   }
 
+  const [selectedAlgo, setAlgo] = useState(algo_type);
+
+
   useEffect(() => { 
     setServerState();
   },[])
@@ -53,7 +61,10 @@ function App() {
           actions={serverData.algos ? serverData.algos?.map((item, index) => ({
             title: item.name,
             description: item.descr,
-            onTrigger: () => console.log('Home'),
+            onTrigger: () => {
+              setAlgo(item);
+              setDrawerOpened(true);
+            },
             icon: <Route size={18} />,
           })) : []}
           searchIcon={<Search size={18} />}
@@ -61,6 +72,18 @@ function App() {
           shortcut="shift + space"
           nothingFoundMessage="Nothing found..."
         >
+          <Drawer
+            opened={drawerOpened}
+            onClose={() => setDrawerOpened(false)}
+            title={<Text size='xl' transform="uppercase">{selectedAlgo.name}</Text>}
+            padding="xl"
+            size="xl"
+          >
+            <Text>Configuration:</Text>
+            <Button leftIcon={<PlayerPlay />} color="teal" size="lg">
+              Run
+            </Button>
+          </Drawer>
           <AppShell
             padding={0}
             header={<Header height={"55px"} p="xs"><Group position="apart"><Group><Image src='/airlift.png' alt="Airlift logo" width='30px' height='30px'></Image><Text variant="gradient"
@@ -72,7 +95,10 @@ function App() {
                 <Menu.Label>Transportation</Menu.Label>
                 {
                   serverData.algos?.map((item, index) => (
-                    <Menu.Item icon={<Route size={14} />}>{item.name}</Menu.Item>
+                    <Menu.Item icon={<Route size={14} />} onClick={() => {
+                      setAlgo(item);
+                      setDrawerOpened(true);
+                    }}>{item.name}</Menu.Item>
                   ))
                 }
                 <Divider />
