@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import Map, { NavigationControl, GeolocateControl, ScaleControl, Layer, ViewStateChangeEvent, MapLayerMouseEvent, Source, MapboxEvent} from 'react-map-gl';
+import Map, { NavigationControl, GeolocateControl, ScaleControl, Layer, ViewStateChangeEvent, Marker, Source, MapboxEvent} from 'react-map-gl';
+import {Location} from 'tabler-icons-react'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 class MapboxMap extends Component<any, any>{
 
@@ -35,6 +36,13 @@ class MapboxMap extends Component<any, any>{
                 <NavigationControl showCompass={true}/>
                 <GeolocateControl />
                 <ScaleControl />
+                <Marker
+                    key={`marker-1`}
+                    longitude={2.352222}
+                    latitude={48.856613}
+                >
+                    <Location size={20}/>
+                </Marker>
             </Map>
         );
     }

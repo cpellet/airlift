@@ -1,6 +1,6 @@
 import { AppShell, Menu, Header, Text, Button, Group, Divider, Drawer, Image, MantineProvider, ColorSchemeProvider, ColorScheme, ActionIcon } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
-import { Search, Route, PlayerPlay, Sun, MoonStars } from 'tabler-icons-react';
+import { Search, Route, PlayerPlay, Sun, MoonStars, Cpu } from 'tabler-icons-react';
 import { SpotlightProvider } from '@mantine/spotlight';
 import './App.css';
 import SpotlightControl from './components/spotlight-control';
@@ -90,7 +90,7 @@ function App() {
               gradient={{ from: 'cyan', to: 'pink', deg: 160 }}
               size="xl"
               weight={700}>AIRLIFT</Text></Group><Group><Menu control={<Button leftIcon={<PlayerPlay />} variant="subtle">
-                Run algorithm
+                Run
               </Button>}>
                 <Menu.Label>Transportation</Menu.Label>
                 {
@@ -103,7 +103,11 @@ function App() {
                 }
                 <Divider />
                 <SpotlightControl />
-              </Menu><ActionIcon
+              </Menu>
+                <Button variant="light" color="green" radius="md" leftIcon={<Cpu size={18} />}>
+                  Analyze
+                </Button>
+              <ActionIcon
                   radius="xl"
                   variant="hover"
                   color={dark ? 'yellow' : 'blue'}
