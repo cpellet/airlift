@@ -1,7 +1,7 @@
 import { AppShell, Menu, Header, Text, Button, Group, Divider, Drawer, Image, MantineProvider, ColorSchemeProvider, ColorScheme, ActionIcon } from '@mantine/core';
 import { NotificationsProvider, showNotification, updateNotification } from '@mantine/notifications';
 import { useLocalStorage } from '@mantine/hooks';
-import { Search, Route, PlayerPlay, Sun, MoonStars, Cpu, X } from 'tabler-icons-react';
+import { Search, Route, PlayerPlay, Sun, MoonStars, Cpu, X, Map, Satellite } from 'tabler-icons-react';
 import { SpotlightProvider } from '@mantine/spotlight';
 import './App.css';
 import SpotlightControl from './components/spotlight-control';
@@ -27,7 +27,7 @@ async function requestAnalysis(){
     radius: 'lg',
     disallowClose: true,
   });
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  let res = await fetchAirliftServerData('http://localhost:5050/analyze');
   updateNotification({
     id: 'load-data',
     color: 'red',
@@ -53,6 +53,7 @@ function App() {
 
   const [drawerOpened, setDrawerOpened] = useState(false);
 
+  const [satDisplay, setSatDisplay] = useState(false);
 
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
@@ -115,7 +116,7 @@ function App() {
               header={<Header height={"55px"} p="xs"><Group position="apart"><Group><Image src='/airlift.png' alt="Airlift logo" width='30px' height='30px'></Image><Text variant="gradient"
                 gradient={{ from: 'cyan', to: 'pink', deg: 160 }}
                 size="xl"
-                weight={700}>AIRLIFT</Text></Group><Group><Menu control={<Button leftIcon={<PlayerPlay />} variant="subtle">
+                weight={700}>AIRLIFT</Text></Group><Group><Menu control={<Button leftIcon={<PlayerPlay />} variant="subtle" disabled={serverData.status !== 'connected'}>
                   Run
                 </Button>}>
                   <Menu.Label>Transportation</Menu.Label>
@@ -130,7 +131,7 @@ function App() {
                   <Divider />
                   <SpotlightControl />
                 </Menu>
-                  <Button variant="light" color="green" radius="md" leftIcon={<Cpu size={18} />} loading={promiseInProgress} onClick={() => {
+                  <Button variant="light" color="green" radius="md" leftIcon={<Cpu size={18} />} loading={promiseInProgress} disabled={serverData.status !== 'connected'} onClick={() => {
                     trackPromise(
                       requestAnalysis()
                     );
@@ -140,17 +141,27 @@ function App() {
                   <ActionIcon
                     radius="xl"
                     variant="hover"
+                    color='blue'
+                    onClick={() => setSatDisplay(!satDisplay)}
+                    title="Toggle color scheme"
+                  >
+                    {satDisplay ? <Satellite size={20} /> : <Map size={20} />}
+                  </ActionIcon>
+                  <ActionIcon
+                    radius="xl"
+                    variant="hover"
                     color={dark ? 'yellow' : 'blue'}
                     onClick={() => toggleColorScheme()}
                     title="Toggle color scheme"
                   >
                     {dark ? <Sun size={20} /> : <MoonStars size={20} />}
-                  </ActionIcon></Group></Group></Header>}
+                  </ActionIcon>
+                  </Group></Group></Header>}
               styles={(theme) => ({
                 main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
               })}
             >
-              <MapboxMap theme={colorScheme} /><StatusPanel status={serverData.status} host={serverData.host} version={serverData.version} retry={setServerState} theme={colorScheme} />
+              <MapboxMap theme={colorScheme} display={satDisplay}/><StatusPanel status={serverData.status} host={serverData.host} version={serverData.version} retry={setServerState} theme={colorScheme} />
             </AppShell>
           </SpotlightProvider>
         </NotificationsProvider>
