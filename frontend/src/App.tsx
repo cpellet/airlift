@@ -1,7 +1,7 @@
-import { AppShell, Menu, Header, Text, Button, Group, Divider, Drawer, Image, MantineProvider, ColorSchemeProvider, ColorScheme, ActionIcon } from '@mantine/core';
+import { AppShell, Menu, Header, Text, Button, Group, Divider, Drawer, Image, Modal, MantineProvider, ColorSchemeProvider, ColorScheme, ActionIcon } from '@mantine/core';
 import { NotificationsProvider, showNotification, updateNotification } from '@mantine/notifications';
 import { useLocalStorage } from '@mantine/hooks';
-import { Search, Route, PlayerPlay, Sun, MoonStars, Cpu, X, Map, Satellite } from 'tabler-icons-react';
+import { Search, Route, PlayerPlay, Sun, MoonStars, Cpu, X, Map, Satellite, ChevronDown } from 'tabler-icons-react';
 import { SpotlightProvider } from '@mantine/spotlight';
 import './App.css';
 import SpotlightControl from './components/spotlight-control';
@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import StatusPanel from './components/status-panel';
 import { usePromiseTracker, trackPromise} from 'react-promise-tracker';
+import SignalsPanel from './components/signals-panel';
 
 async function fetchAirliftServerData(url: string) {
   return axios.get(url).then(function (res) { return res.data; }).catch(function (error) {
@@ -54,6 +55,8 @@ function App() {
   const [drawerOpened, setDrawerOpened] = useState(false);
 
   const [satDisplay, setSatDisplay] = useState(false);
+
+  const [signalPanelOpened, setSignalPanelOpened] = useState(false);
 
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
@@ -116,7 +119,23 @@ function App() {
               header={<Header height={"55px"} p="xs"><Group position="apart"><Group><Image src='/airlift.png' alt="Airlift logo" width='30px' height='30px'></Image><Text variant="gradient"
                 gradient={{ from: 'cyan', to: 'pink', deg: 160 }}
                 size="xl"
-                weight={700}>AIRLIFT</Text></Group><Group><Menu control={<Button leftIcon={<PlayerPlay />} variant="subtle" disabled={serverData.status !== 'connected'}>
+                weight={700}>AIRLIFT</Text><Menu trigger="click" delay={500} control={<Button variant="subtle">Signals </Button>}>
+                  {
+                    <>
+                      <Menu.Label>Recent</Menu.Label>
+                      <Menu.Item
+                        onClick={() => {setSignalPanelOpened(true)}}
+                        rightSection={
+                          <Text size="sm" color="gray">
+                            Ctrl+s
+                          </Text>
+                        }
+                      >
+                        Search
+                      </Menu.Item>
+                    </>
+                  }
+                </Menu></Group><Group><Menu control={<Button leftIcon={<PlayerPlay />} variant="subtle" disabled={serverData.status !== 'connected'}>
                   Run
                 </Button>}>
                   <Menu.Label>Transportation</Menu.Label>
@@ -162,6 +181,14 @@ function App() {
               })}
             >
               <MapboxMap theme={colorScheme} display={satDisplay}/><StatusPanel status={serverData.status} host={serverData.host} version={serverData.version} retry={setServerState} theme={colorScheme} />
+              <Modal
+                size={"80vw"}
+                opened={signalPanelOpened}
+                onClose={() => setSignalPanelOpened(false)}
+                title="Search for signals"
+              >
+                <SignalsPanel/>
+              </Modal>
             </AppShell>
           </SpotlightProvider>
         </NotificationsProvider>
