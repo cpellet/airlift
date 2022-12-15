@@ -2,32 +2,6 @@
   text-align: center;
 }
 
-.status-panel-container {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  position: fixed;
-  text-align: center;
-  width: 100%;
-}
-
-.status-panel {
-  padding: 3px;
-  border-radius: 10px 10px 0 0;
-  width: fit-content;
-  block-size: fit-content;
-  background-color: #fff;
-  justify-content: center;
-  text-align: center;
-  position: relative;
-  margin: auto;
-  display: flex;
-}
-
-.status-panel-component {
-  margin: auto 0 auto 0;
-  padding-inline: 5px;
-}
-
 .center-vert {
   margin: auto;
   margin-left: 10px;

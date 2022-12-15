@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1098.25 303.15">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient-2);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="37.79" y1="112.7" x2="263.47" y2="338.38" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#15f5ff"/>
+      <stop offset=".25" stop-color="#53aced"/>
+      <stop offset=".52" stop-color="#9363db"/>
+      <stop offset=".74" stop-color="#c12dce"/>
+      <stop offset=".91" stop-color="#de0cc6"/>
+      <stop offset="1" stop-color="#e900c3"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="37.53" y1="113.05" x2="263.21" y2="338.73" xlink:href="#linear-gradient"/>
+  </defs>
+  <path class="cls-1" d="M52.26,302.8H.26L95.06,62.8c10-25.2,28.4-34.8,56.8-34.8s46.4,9.6,56,34.8l91.2,240h-52.4L164.66,85.6c-2.4-6.4-6.8-9.2-13.2-9.2s-10.8,2.8-13.6,9.2L52.26,302.8Z"/>
+  <path class="cls-2" d="M379.46,12V61.2h-42.8V12h42.8Zm-.4,79.6v211.2h-42.4V91.6h42.4Z"/>
+  <path class="cls-2" d="M583.46,91.6v40.8h-74.4c-18.8,0-27.2,8.8-27.2,27.2v143.2h-42.4V153.2c0-42.4,15.6-61.6,57.2-61.6h86.8Z"/>
+  <path class="cls-2" d="M667.46,0V302.8h-42.4V0h42.4Z"/>
+  <path class="cls-2" d="M771.06,12V61.2h-42.8V12h42.8Zm-.4,79.6v211.2h-42.4V91.6h42.4Z"/>
+  <path class="cls-2" d="M839.05,91.6v-18.8c0-55.2,18.8-72.8,62.4-72.8h38V38.8h-29.2c-20,0-28.4,8-28.4,31.6v21.2h58.4v40.8h-58.4v170.4h-42.8V132.4h-28.8v-40.8h28.8Z"/>
+  <path class="cls-2" d="M997.05,91.6V41.6h42.8v50h58.4v40.8h-58.4v100c0,23.6,8.4,31.6,28.4,31.6h29.2v38.8h-38c-43.6,0-62.4-17.6-62.4-72.8v-97.6h-28.8v-40.8h28.8Z"/>
+  <path class="cls-3" d="M52,303.15H0L94.8,63.15c10-25.2,28.4-34.8,56.8-34.8s46.4,9.6,56,34.8l91.2,240h-52.4L164.4,85.95c-2.4-6.4-6.8-9.2-13.2-9.2s-10.8,2.8-13.6,9.2L52,303.15Z"/>
+</svg>
