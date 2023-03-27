@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, Loader, ThemeIcon, Tooltip, Button } from '@mantine/core'
-import { Check, X } from 'tabler-icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 
 
 function DisplayElements(props: any) {
@@ -15,7 +15,7 @@ function DisplayElements(props: any) {
         return (
             <>
                 <ThemeIcon className='center-vert' variant="light" radius="xl" color="green" size="xs">
-                    <Check />
+                    <IconCheck />
                 </ThemeIcon>
                 <Text className="status-panel-component" size="xs" weight={500} color="green" align="center">Connected to {props.host}</Text>
             </>
@@ -24,7 +24,7 @@ function DisplayElements(props: any) {
         return (
             <>
                 <ThemeIcon className='center-vert' variant="light" radius="xl" color="red" size="xs">
-                    <X />
+                    <IconX />
                 </ThemeIcon>
                 <Text className="status-panel-component" size="xs" weight={500} color="red" align="center">Could not connect to server</Text>
                 <Button variant="subtle" radius="md" size="xs" compact>
@@ -32,7 +32,7 @@ function DisplayElements(props: any) {
                 </Button>
             </>
         )
-    } else{
+    } else {
         return (<p>Error</p>);
     }
 }
@@ -43,7 +43,7 @@ class StatusPanel extends React.Component<any, any>{
     click = () => {
         this.props.retry();
     }
-    
+
     render(): React.ReactNode {
         return (
             <div className="status-panel-container">

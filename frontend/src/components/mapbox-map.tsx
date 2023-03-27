@@ -1,6 +1,6 @@
-import { Component} from 'react';
-import Map, { NavigationControl, GeolocateControl, ScaleControl, Layer, ViewStateChangeEvent, Marker, Source, MapboxEvent, MapRef} from 'react-map-gl';
-import {Location} from 'tabler-icons-react'
+import { Component } from 'react';
+import Map, { NavigationControl, GeolocateControl, ScaleControl, Layer, ViewStateChangeEvent, Marker, Source, MapboxEvent, MapRef } from 'react-map-gl';
+import { IconLocation } from '@tabler/icons-react'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 
 const callApiDatasetMetadata = async (uuid: string) => {
@@ -53,11 +53,11 @@ const addTileLayerToMap = (mapVar: any, title: string, url: string) => {
 }
 
 
-type CProps = { display: boolean, theme: string};
-type CState = { };
+type CProps = { display: boolean, theme: string };
+type CState = {};
 class MapboxMap extends Component<CProps, CState>{
 
-    onLoad = async (e: MapboxEvent) =>{
+    onLoad = async (e: MapboxEvent) => {
         var draw = new MapboxDraw();
         e.target.addControl(draw);
         const datasetId = 'b584954c-0d8d-40c6-859c-f3fdf3c2c5df';
@@ -86,9 +86,9 @@ class MapboxMap extends Component<CProps, CState>{
                 }}
             >
                 <Source type='geojson' id='bbox' data={{ type: 'FeatureCollection', features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: [-122.4, 37.8] }, properties: {} }, { type: 'Feature', geometry: { type: 'Point', coordinates: [-123.5, 39.9] }, properties: {} }] }}><Layer id='point' type='fill' source='bbox' paint={{
-                   
+
                 }} /></Source>
-                <NavigationControl showCompass={true}/>
+                <NavigationControl showCompass={true} />
                 <GeolocateControl />
                 <ScaleControl />
                 <Marker
@@ -96,7 +96,7 @@ class MapboxMap extends Component<CProps, CState>{
                     longitude={2.352222}
                     latitude={48.856613}
                 >
-                    <Location size={20}/>
+                    <IconLocation size={20} />
                 </Marker>
             </Map>
         );

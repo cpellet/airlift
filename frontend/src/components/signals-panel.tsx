@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { Input, Table, Button, Center, Space, Pagination } from '@mantine/core';
-import { Search } from 'tabler-icons-react';
+import { IconSearch } from '@tabler/icons-react';
 import axios from 'axios';
 import moment from 'moment';
 import { usePromiseTracker, trackPromise } from 'react-promise-tracker';
@@ -18,11 +18,11 @@ class SignalsPanel extends Component<any, any>{
             fetchNextUri: null,
         }
     }
-    
+
     async fetchSignalsFromRW(query: string) {
         return axios.get("https://api.resourcewatch.org/v1/dataset?search=" + query).then(function (res) {
             console.log(res.data);
-            return { data: res.data.data, pages: res.data.meta['total-pages'], total: res.data.meta['total-items']} ;
+            return { data: res.data.data, pages: res.data.meta['total-pages'], total: res.data.meta['total-items'] };
         }).catch(function (error) {
             return {};
         });
@@ -32,11 +32,11 @@ class SignalsPanel extends Component<any, any>{
         return (
             <>
                 <Input
-                    icon={<Search />}
+                    icon={<IconSearch />}
                     placeholder="Start typing here..."
                     radius="md"
-                    onChange={async (e:any) => {
-                        this.setState({signals : []});
+                    onChange={async (e: any) => {
+                        this.setState({ signals: [] });
                         var res = await this.fetchSignalsFromRW(e.target.value);
                         //this.setState({signals : this.state.signals.concat(res.data)});
                     }}
